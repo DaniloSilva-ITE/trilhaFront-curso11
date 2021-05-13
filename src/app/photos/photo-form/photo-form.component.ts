@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { PhotoService } from '../photo/photo.service';
 
 @Component({
-  selector: 'ap-photo-form',
+  selector: 'app-photo-form',
   templateUrl: './photo-form.component.html',
   styleUrls: ['./photo-form.component.css']
 })
@@ -12,6 +12,7 @@ export class PhotoFormComponent implements OnInit {
 
   photoForm: FormGroup;
   file: File;
+  preview: string;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -34,5 +35,12 @@ export class PhotoFormComponent implements OnInit {
     this.photoService
       .upload(description, allowComments, this.file)
       .subscribe(() => this.router.navigate(['']));
+  }
+
+  handleFile(file: File) {
+    this.file = file;
+    const reader = new FileReader();
+    reader.onload = (event: any) => this.preview = event.target.result;
+    reader.readAsDataURL(file);
   }
 }
